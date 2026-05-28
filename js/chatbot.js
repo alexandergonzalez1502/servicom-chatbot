@@ -39,15 +39,15 @@
 
   const DEMO_FACTURAS = [
     {
-      numero_factura: "FAC-2026-0412",
-      fecha: "2026-04-01",
+      numero: "FAC-2026-0412",
+      fecha_emision: "2026-04-01",
       importe: 4200,
       dias_vencimiento: -5,
       estado: "vencida",
     },
     {
-      numero_factura: "FAC-2026-0389",
-      fecha: "2026-03-15",
+      numero: "FAC-2026-0389",
+      fecha_emision: "2026-03-15",
       importe: 8250,
       dias_vencimiento: 12,
       estado: "vigente",
@@ -89,7 +89,7 @@
     },
   };
 
-  const supabaseReady = typeof window.SupabaseService !== "undefined";;
+  const supabaseReady = typeof window.SupabaseService !== "undefined";
 
   // ─── Utilidades ───────────────────────────────────────────────
 
@@ -173,8 +173,8 @@
       importe: null,
       numeroTransferencia: null,
       archivo: null,
-    };
-    if (fileInput) fileInput.value = "";
+    },
+    (fileInput.value = "");
   }
 
   function isLoggedIn() {
@@ -351,8 +351,6 @@
 
     return { ok: true };
   }
-
-  // ─── Supabase / demo ──────────────────────────────────────────
 
   // ─── Supabase / demo ──────────────────────────────────────────
 
@@ -645,7 +643,7 @@
         }
       );
     } catch (err) {
-      console.error(err);
+      console.error("Error al renderizar saldo:", err);
       addBotMessage("No pudimos obtener su saldo. Intente nuevamente.");
       addQuickButtons(["Volver al menú"], () => {
         addUserMessage("Volver al menú");
@@ -654,6 +652,16 @@
     }
   }
 
+  // Función restaurada para calcular el vencimiento
+  function isFacturaVencida(f) {
+    if (f.estado === "vencida" || f.estado === "Vencida") return true;
+    if (typeof f.dias_vencimiento === "number" && f.dias_vencimiento < 0) {
+      return true;
+    }
+    return false;
+  }
+
+  // Función actualizada con los nombres de columnas de tu Supabase
   async function goToFacturas() {
     goTo(STATE.FACTURAS);
     addBotMessage("Cargando sus facturas...");
@@ -662,7 +670,7 @@
       const facturas = await apiGetFacturas(session.usuario.id);
       session.facturasCache = facturas;
 
-      if (!facturas.length) {
+      if (!facturas || !facturas.length) {
         addBotMessage("No tiene facturas registradas en este momento.");
         addQuickButtons(["Volver al menú"], () => {
           addUserMessage("Volver al menú");
@@ -673,7 +681,8 @@
 
       const filas = facturas
         .map((f) => {
-          const numero = f.numero_factura ?? f.id;
+          // Usamos 'numero' y 'fecha_emision' tal como está en tu Supabase
+          const numero = f.numero ?? f.id; 
           const vencida = isFacturaVencida(f);
           const badgeClass = vencida
             ? "chatbot-badge--vencida"
@@ -686,7 +695,7 @@
                 <p><strong>${numero}</strong>
                   <span class="chatbot-badge ${badgeClass}">${badgeText}</span>
                 </p>
-                <p>Fecha: ${formatDate(f.fecha)} · ${formatMoney(f.importe ?? f.monto)}</p>
+                <p>Fecha: ${formatDate(f.fecha_emision)} · ${formatMoney(f.importe)}</p>
               </div>
               <div class="chatbot-factura-actions">
                 <button type="button" class="chatbot-btn-sm chatbot-btn-descargar" data-num="${numero}">
@@ -719,7 +728,7 @@
         }
       );
     } catch (err) {
-      console.error(err);
+      console.error("Error al renderizar facturas:", err);
       addBotMessage("No pudimos cargar sus facturas.");
       addQuickButtons(["Volver al menú"], () => {
         addUserMessage("Volver al menú");
@@ -736,13 +745,13 @@
 
     try {
       const facturas =
-        session.facturasCache.length > 0
+        session.facturasCache && session.facturasCache.length > 0
           ? session.facturasCache
           : await apiGetFacturas(session.usuario.id);
 
       session.facturasCache = facturas;
 
-      if (!facturas.length) {
+      if (!facturas || !facturas.length) {
         addBotMessage("No hay facturas disponibles para informar un pago.");
         setFooterEnabled(true);
         goToMenu();
@@ -751,7 +760,7 @@
 
       const labels = facturas.map(
         (f) =>
-          `${f.numero_factura ?? f.id} (${formatMoney(f.importe ?? f.monto)})`
+          `${f.numero ?? f.id} (${formatMoney(f.importe ?? f.monto)})`
       );
 
       addQuickButtons([...labels, "Cancelar"], (label) => {
