@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Servicom Global — Asistente de cobranzas</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <h1>Servicom Global</h1>
+      <p>Portal de demostración del asistente de cobranzas</p>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <h2>Bienvenido</h2>
+      <p>
+        Use el botón de chat en la esquina inferior derecha para consultar
+        saldos, facturas y opciones de pago con nuestro asistente virtual.
+      </p>
+    </section>
+  </main>
+
+  <!-- Widget flotante -->
+  <div id="chatbot-widget" class="chatbot-widget" aria-live="polite">
+    <button
+      id="chatbot-toggle"
+      class="chatbot-toggle"
+      type="button"
+      aria-expanded="false"
+      aria-controls="chatbot-panel"
+      aria-label="Abrir chat de cobranzas"
+    >
+      <svg class="chatbot-toggle-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path
+          d="M20 2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h3l4 4 4-4h5c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"
+          fill="currentColor"
+        />
+      </svg>
+    </button>
+
+    <div
+      id="chatbot-panel"
+      class="chatbot-panel"
+      role="dialog"
+      aria-label="Chat con asistente de cobranzas"
+      hidden
+    >
+      <header class="chatbot-header">
+        <div class="chatbot-header-brand">
+          <span class="chatbot-logo" aria-hidden="true">SG</span>
+          <div class="chatbot-header-text">
+            <strong class="chatbot-header-name">Servicom Global</strong>
+            <span class="chatbot-header-subtitle">Asistente de cobranzas</span>
+          </div>
+        </div>
+        <div class="chatbot-header-actions">
+          <span class="chatbot-status-dot" title="Activo" aria-label="En línea"></span>
+          <button
+            id="chatbot-close"
+            class="chatbot-close"
+            type="button"
+            aria-label="Cerrar chat"
+          >
+            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+              <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+      </header>
+
+      <div class="chatbot-body">
+        <div id="chatbot-messages" class="chatbot-messages"></div>
+        <div id="chatbot-quick-buttons" class="chatbot-quick-buttons"></div>
+      </div>
+
+      <input
+        type="file"
+        id="chatbot-file-input"
+        class="chatbot-file-input"
+        accept=".pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png"
+        hidden
+      />
+
+      <footer class="chatbot-footer">
+        <form id="chatbot-form" class="chatbot-form">
+          <input
+            id="chatbot-input"
+            class="chatbot-input"
+            type="text"
+            placeholder="Escriba su mensaje..."
+            autocomplete="off"
+          />
+          <button class="chatbot-send" type="submit" aria-label="Enviar mensaje">
+            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+              <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" stroke="currentColor" stroke-width="2" stroke-linejoin="round" fill="none"/>
+            </svg>
+          </button>
+        </form>
+      </footer>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="js/env.config.js"></script>
+  <script src="js/supabase.js"></script>
+  <script src="js/chatbot.js"></script>
+</body>
+</html>
