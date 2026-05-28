@@ -6,7 +6,7 @@
   "use strict";
 
   const SUPABASE_URL = 'https://mtnzjerhdarlzkwxaxee.supabase.co';
-  const SUPABASE_ANON_KEY = 'sb_publishable_Uv7CBad9E-oBBoqBPCXAog_-KSAV_Jk';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im10bnpqZXJoZGFybHprd3hheGVlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk5MTIyNTYsImV4cCI6MjA5NTQ4ODI1Nn0.6-3-0d_SrwOcdKfA2TAQ5nH6NKW6BN2lGsTqBJ5b27A';
 
   let client = null;
 
