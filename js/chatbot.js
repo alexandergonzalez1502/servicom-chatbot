@@ -89,8 +89,7 @@
     },
   };
 
-  const supabaseReady =
-    typeof window.SupabaseAPI !== "undefined" && window.SupabaseAPI.isConfigured();
+  const supabaseReady = typeof window.SupabaseService !== "undefined";;
 
   // ─── Utilidades ───────────────────────────────────────────────
 
@@ -355,9 +354,11 @@
 
   // ─── Supabase / demo ──────────────────────────────────────────
 
+  // ─── Supabase / demo ──────────────────────────────────────────
+
   async function apiLogin(cuit, password) {
     if (supabaseReady) {
-      return window.SupabaseAPI.loginUsuario(cuit, password);
+      return window.SupabaseService.loginUsuario(cuit, password);
     }
     await delay(400);
     if (cuit === "20-12345678-9" && password === "demo123") {
@@ -372,7 +373,7 @@
 
   async function apiGetSaldo(usuarioId) {
     if (supabaseReady) {
-      return window.SupabaseAPI.getSaldoCuenta(usuarioId);
+      return window.SupabaseService.getSaldoCuenta(usuarioId);
     }
     await delay(300);
     return { ...DEMO_SALDO };
@@ -380,7 +381,7 @@
 
   async function apiGetFacturas(usuarioId) {
     if (supabaseReady) {
-      return window.SupabaseAPI.getFacturas(usuarioId);
+      return window.SupabaseService.getFacturas(usuarioId);
     }
     await delay(300);
     return [...DEMO_FACTURAS];
@@ -388,7 +389,7 @@
 
   async function apiRegistrarPago(datos) {
     if (supabaseReady) {
-      return window.SupabaseAPI.registrarAvisoPago(
+      return window.SupabaseService.registrarAvisoPago(
         datos.usuarioId,
         datos.numeroFactura,
         datos.importe,
@@ -402,7 +403,7 @@
 
   async function apiSubirComprobante(archivo, referencia) {
     if (supabaseReady) {
-      return window.SupabaseAPI.subirComprobante(archivo, referencia);
+      return window.SupabaseService.subirComprobante(archivo, referencia);
     }
     await delay(500);
     return `https://demo.servicomglobal.com/comprobantes/${referencia}`;
@@ -410,14 +411,6 @@
 
   function delay(ms) {
     return new Promise((resolve) => setTimeout(resolve, ms));
-  }
-
-  function isFacturaVencida(f) {
-    if (f.estado === "vencida") return true;
-    if (typeof f.dias_vencimiento === "number" && f.dias_vencimiento < 0) {
-      return true;
-    }
-    return false;
   }
 
   // ─── FAQ (sin login) ──────────────────────────────────────────
